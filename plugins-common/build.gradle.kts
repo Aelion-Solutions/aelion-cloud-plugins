@@ -2,6 +2,10 @@ plugins {
     `java-library`
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(8)
+}
+
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
 }

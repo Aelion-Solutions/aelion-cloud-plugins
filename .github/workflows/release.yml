@@ -11,6 +11,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: read
 
 jobs:
   release-please:
@@ -38,11 +39,13 @@ jobs:
         with:
           ref: ${{ needs.release-please.outputs.tag_name }}
 
-      - name: Set up JDK 21
+      - name: Set up JDKs
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: |
+            25
+            21
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -54,13 +57,20 @@ jobs:
           bash ./gradlew build --no-daemon -Pversion="$VERSION"
         env:
           TAG: ${{ needs.release-please.outputs.tag_name }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.AERO_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Resolve version
         id: version
         run: |
           VERSION="${TAG##*v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          ls -la npcs-paper/build/libs/ signs-paper/build/libs/ || true
+          ls -la npcs-paper/build/libs/ \
+            signs-bukkit-1_8/build/libs/ \
+            signs-bukkit-1_13/build/libs/ \
+            signs-paper-1_17/build/libs/ \
+            signs-paper-1_21/build/libs/ \
+            signs-paper-26/build/libs/ || true
         env:
           TAG: ${{ needs.release-please.outputs.tag_name }}
 
@@ -71,6 +81,10 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             npcs-paper/build/libs/aelion-npcs-${{ steps.version.outputs.version }}.jar
-            signs-paper/build/libs/aelion-signs-${{ steps.version.outputs.version }}.jar
+            signs-bukkit-1_8/build/libs/aelion-signs-bukkit-1_8-${{ steps.version.outputs.version }}.jar
+            signs-bukkit-1_13/build/libs/aelion-signs-bukkit-1_13-${{ steps.version.outputs.version }}.jar
+            signs-paper-1_17/build/libs/aelion-signs-paper-1_17-${{ steps.version.outputs.version }}.jar
+            signs-paper-1_21/build/libs/aelion-signs-paper-1_21-${{ steps.version.outputs.version }}.jar
+            signs-paper-26/build/libs/aelion-signs-paper-26-${{ steps.version.outputs.version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,112 @@
+# Aelion Signs — host-local wall configuration
+# Live fleet data comes from SoftDepend AelionAero (AeroFleetService).
+
+enabled: true
+# How often to pull fleet data via Aero (milliseconds)
+fleet-poll-ms: 2000
+switch-to-searching-when-full: true
+
+animation:
+  tick-ms: 50
+  # global = one clock for all signs; per-sign = independent clocks
+  sync-mode: global
+  only-when-players-near: false
+  player-near-radius: 32
+
+forcefield:
+  enabled: true
+  shape: sphere              # sphere | box
+  radius: 1.0
+  height: 2.0                # used for box (and vertical half-extent)
+  y-offset: 0.0
+  strength: 0.8
+  vertical-strength: 0.25
+  check-interval-ticks: 5
+  cooldown-ms: 250
+  bypass-permission: aelion.signs.forcefield.bypass
+  apply-when: [searching, starting, empty, online, full]
+  particles:
+    enabled: false
+    type: CRIT
+    count: 3
+  sound:
+    enabled: false
+    type: ENTITY_PLAYER_ATTACK_KNOCKBACK
+    volume: 0.4
+    pitch: 1.2
+
+# Default layouts (overridable per target-group under group-layouts)
+layouts:
+  searching:
+    animations-per-second: 1
+    mode: loop               # loop | pingpong
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&eSearching"
+          - "&7."
+          - ""
+        block-material: REDSTONE_BLOCK
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&eSearching"
+          - "&7.."
+          - ""
+        block-material: REDSTONE_BLOCK
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&eSearching"
+          - "&7..."
+          - ""
+        block-material: REDSTONE_BLOCK
+  starting:
+    animations-per-second: 1
+    mode: loop
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&6Starting"
+          - "&7%name%"
+          - ""
+        block-material: BEDROCK
+  empty:
+    animations-per-second: 0
+    mode: loop
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&a%name%"
+          - "&f%online%/%max%"
+          - "&aEmpty"
+        block-material: GOLD_BLOCK
+  online:
+    animations-per-second: 0
+    mode: loop
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&a%name%"
+          - "&f%online%/%max%"
+          - "&aOnline"
+        block-material: GOLD_BLOCK
+  full:
+    animations-per-second: 0
+    mode: loop
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&c%name%"
+          - "&f%online%/%max%"
+          - "&cFull"
+        block-material: EMERALD_BLOCK
+
+# Optional per displayed group layout overrides (key = group name)
+group-layouts: {}
+# example:
+#   bedwars:
+#     empty:
+#       animations-per-second: 0
+#       mode: loop
+#       frames:
+#         - lines: ["&eBedWars", "&a%name%", "%online%/%max%", ""]
+#           block-material: GOLD_BLOCK
