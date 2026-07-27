@@ -1,0 +1,25 @@
+name: AelionSigns
+version: ${version}
+main: com.aelion.plugins.signs.paper.v1_21.SignsPaperPlugin
+api-version: "1.21"
+author: Aelion Solutions
+description: Panel-driven join/status signs for Aelion Cloud (1.21)
+website: https://github.com/Aelion-Solutions/aelion-cloud-plugins
+depend:
+  - AelionAero
+commands:
+  aesign:
+    description: Manage Aelion Signs
+    usage: /aesign <create|remove|removeall|cleanup|reload> ...
+    aliases: [signs]
+    permission: aelion.signs.admin
+permissions:
+  aelion.signs.admin:
+    description: Create and manage signs
+    default: op
+  aelion.signs.forcefield.bypass:
+    description: Bypass sign-area forcefield
+    default: false
+  aelion.signs.knockback.bypass:
+    description: Legacy alias for forcefield bypass
+    default: false

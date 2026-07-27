@@ -1,0 +1,24 @@
+product: aelion-signs
+schemaVersion: 1
+backends:
+  - artifact: aelion-signs-bukkit-1_8
+    software: [spigot, craftbukkit, paperspigot, paper]
+    mcMin: "1.8"
+    mcMax: "1.12.2"
+  - artifact: aelion-signs-bukkit-1_13
+    software: [spigot, craftbukkit, paper, purpur]
+    mcMin: "1.13"
+    mcMax: "1.16.5"
+  - artifact: aelion-signs-paper-1_17
+    software: [paper, purpur, spigot]
+    mcMin: "1.17"
+    mcMax: "1.20.6"
+  - artifact: aelion-signs-paper-1_21
+    software: [paper, purpur]
+    mcMin: "1.21"
+    mcMax: "1.21.99"
+  - artifact: aelion-signs-paper-26
+    software: [paper, purpur]
+    mcMin: "26.1"
+    mcMax: "26.99"
+proxies: []

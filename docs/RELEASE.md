@@ -28,7 +28,11 @@ On `main`, enable branch protection:
 6. Release-please creates `vX.Y.Z` and the GitHub Release.
 7. The same workflow builds and uploads:
    - `aelion-npcs-X.Y.Z.jar`
-   - `aelion-signs-X.Y.Z.jar`
+   - `aelion-signs-bukkit-1_8-X.Y.Z.jar`
+   - `aelion-signs-bukkit-1_13-X.Y.Z.jar`
+   - `aelion-signs-paper-1_17-X.Y.Z.jar`
+   - `aelion-signs-paper-1_21-X.Y.Z.jar`
+   - `aelion-signs-paper-26-X.Y.Z.jar`
 
 ## Manual re-run
 
