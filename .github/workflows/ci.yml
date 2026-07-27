@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     runs-on: [self-hosted, linux, aelion]
@@ -25,3 +29,8 @@ jobs:
 
       - name: Build
         run: bash ./gradlew build --no-daemon
+        env:
+          # Prefer classic PAT with read:packages (cross-repo Packages).
+          # Fallback GITHUB_TOKEN only works if aero-api package grants this repo access.
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.AERO_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
