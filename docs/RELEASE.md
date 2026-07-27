@@ -27,6 +27,7 @@ On `main`, enable branch protection:
 5. **Approve and merge** the release PR.
 6. Release-please creates `vX.Y.Z` and the GitHub Release.
 7. The same workflow builds and uploads:
+   - `signs-compat.yml`
    - `aelion-npcs-X.Y.Z.jar`
    - `aelion-signs-bukkit-1_8-X.Y.Z.jar`
    - `aelion-signs-bukkit-1_13-X.Y.Z.jar`

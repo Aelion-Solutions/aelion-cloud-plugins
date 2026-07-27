@@ -80,6 +80,7 @@ jobs:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
           fail_on_unmatched_files: true
           files: |
+            compat/signs-compat.yml
             npcs-paper/build/libs/aelion-npcs-${{ steps.version.outputs.version }}.jar
             signs-bukkit-1_8/build/libs/aelion-signs-bukkit-1_8-${{ steps.version.outputs.version }}.jar
             signs-bukkit-1_13/build/libs/aelion-signs-bukkit-1_13-${{ steps.version.outputs.version }}.jar

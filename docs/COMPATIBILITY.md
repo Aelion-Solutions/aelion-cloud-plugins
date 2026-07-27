@@ -28,11 +28,12 @@ All bands include:
 
 On provision / plugin install the panel:
 
-1. Maps instance `software` to a family (`paper`, `spigot`, …).
-2. Parses Minecraft version.
-3. Finds the **unique** matching row in `compat/signs-compat.yml` (vendored as `signs-compat.data.ts`).
-4. Installs the matching GitHub Release asset by filename prefix.
-5. If no row matches → fail with a clear unsupported error (do not guess).
+1. Fetches the GitHub Release for the Signs product version (latest, or pin when per-package pins exist).
+2. Loads that release’s `signs-compat.yml` (release asset, or Contents API fallback at the tag).
+3. Maps instance `software` to a family (`paper`, `spigot`, …) and parses Minecraft version.
+4. Finds the **unique** matching row in that version’s matrix.
+5. Installs the matching GitHub Release asset by filename prefix.
+6. If no row matches → fail with a clear unsupported error (do not guess).
 
 Proxies are not supported (`COMPAT_SIGNS_PROXY`).
 
@@ -42,7 +43,7 @@ When adding another first-party plugin:
 
 1. Shared library module + thin band modules (same cliffs as Aero/Signs).
 2. `compat/<product>-compat.yml` with `schemaVersion: 1` backends rows.
-3. Vendor into `aelion-cloud` as `*-compat.data.ts` and wire `getXCompatMatrix()` in `matrix.ts`.
+3. Publish the YAML as a release asset; wire cloud catalog `compat` metadata + matrix resolver.
 4. Release assets named `<artifact>-<productVersion>.jar`.
 
 NPCs remains a single Paper 1.21 stub until it leaves scaffold.

@@ -11,17 +11,18 @@ JARs from this repo.
 | Tags | `vX.Y.Z` |
 | NPCs asset | `aelion-npcs-X.Y.Z.jar` |
 | Signs assets | `aelion-signs-<band>-X.Y.Z.jar` (see [COMPATIBILITY.md](COMPATIBILITY.md)) |
+| Compat matrix | `signs-compat.yml` on each GitHub Release (source: `compat/signs-compat.yml`) |
 | Panel catalog ids | `npcs`, `signs` |
-| Compat matrix | `compat/signs-compat.yml` → Cloud `signs-compat.data.ts` |
 | Auth | Panel env `AERO_GITHUB_TOKEN` (org PAT with Releases read) |
 
-One GitHub Release holds NPCs plus all Signs band JARs. The panel picks Signs
-assets by **banded filename prefix** from the compat matrix.
+One GitHub Release holds NPCs plus all Signs band JARs **and** `signs-compat.yml`.
+The panel caches the matrix under `data/aero-plugins/signs/<productVer>/` and picks
+Signs assets by **banded filename prefix**.
 
 ## Panel side
 
-- Catalog: `backend/src/services/plugins/catalog.ts`
-- Compat: `backend/src/services/plugins/compat/matrix.ts` + `signs-compat.data.ts`
+- Catalog: `backend/src/services/plugins/catalog.ts` (`compat` metadata)
+- Compat resolve: `backend/src/services/plugins/compat/matrix.ts` + `parse.ts`
 - Fetch/cache: `backend/src/services/plugins/fetch.ts` → `data/aero-plugins/<packageId>/`
 - Admin UI: System Configuration → Plugins
 - Prefetch: `POST /api/plugins/aelion/:packageId/prefetch`
