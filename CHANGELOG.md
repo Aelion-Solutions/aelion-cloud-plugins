@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/Aelion-Solutions/aelion-cloud-plugins/compare/v0.2.0...v0.3.0) (2026-07-27)
+
+
+### Features
+
+* **release:** attach signs-compat.yml to GitHub Releases ([5f78dc2](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/5f78dc2510a71c0532217aad36c2777df5551421))
+* **release:** attach signs-compat.yml to GitHub Releases ([b61193a](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/b61193a5099dca4a5327fcc26f174d6c5f938d6d))
+* **signs:** ship MC version bands 1.8-26 ([e3121a4](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/e3121a4ac1c080b98dd8c9b971e67be1e6bf2e37))
+* **signs:** ship MC version bands 1.8-26 ([760b1b0](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/760b1b09d2b4f733ee0b2e6eeee6e3b27f2d4162))
+
+
+### Bug Fixes
+
+* **signs:** don't advance per-sign animation tick outside animation task ([a927169](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/a9271698fd780b2135fb24a2ec04c79c159886ea))
+* **signs:** only advance per-sign tick when a frame is actually drawn ([ff8ea70](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/ff8ea70ab044d1b3c093af5d00743f2d5f5836b4))
+
 ## [0.2.0](https://github.com/Aelion-Solutions/aelion-cloud-plugins/compare/v0.1.0...v0.2.0) (2026-07-27)
 
 
