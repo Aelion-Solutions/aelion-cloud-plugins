@@ -1,0 +1,85 @@
+# Aelion Signs — host-local wall configuration
+# Live fleet data comes from SoftDepend AelionAero (AeroFleetService).
+
+enabled: true
+# How often to pull fleet data via Aero (milliseconds)
+fleet-poll-ms: 2000
+# Animation tick interval (milliseconds); layouts use animations-per-second
+animation-tick-ms: 50
+switch-to-searching-when-full: true
+
+knockback:
+  enabled: true
+  distance: 1.0
+  strength: 0.8
+  bypass-permission: aelion.signs.knockback.bypass
+
+# Default layouts (overridable per target-group under group-layouts)
+layouts:
+  searching:
+    animations-per-second: 1
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&eSearching"
+          - "&7."
+          - ""
+        block-material: REDSTONE_BLOCK
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&eSearching"
+          - "&7.."
+          - ""
+        block-material: REDSTONE_BLOCK
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&eSearching"
+          - "&7..."
+          - ""
+        block-material: REDSTONE_BLOCK
+  starting:
+    animations-per-second: 1
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&6Starting"
+          - "&7%name%"
+          - ""
+        block-material: BEDROCK
+  empty:
+    animations-per-second: 0
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&a%name%"
+          - "&f%online%/%max%"
+          - "&aEmpty"
+        block-material: GOLD_BLOCK
+  online:
+    animations-per-second: 0
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&a%name%"
+          - "&f%online%/%max%"
+          - "&aOnline"
+        block-material: GOLD_BLOCK
+  full:
+    animations-per-second: 0
+    frames:
+      - lines:
+          - "&7[&bAelion&7]"
+          - "&c%name%"
+          - "&f%online%/%max%"
+          - "&cFull"
+        block-material: EMERALD_BLOCK
+
+# Optional per displayed group layout overrides (key = group name)
+group-layouts: {}
+# example:
+#   bedwars:
+#     empty:
+#       animations-per-second: 0
+#       frames:
+#         - lines: ["&eBedWars", "&a%name%", "%online%/%max%", ""]
+#           block-material: GOLD_BLOCK

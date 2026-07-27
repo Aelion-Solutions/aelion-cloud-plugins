@@ -1,0 +1,7 @@
+name: AelionNPCs
+version: ${version}
+main: com.aelion.plugins.npcs.NpcsPaperPlugin
+api-version: "1.21"
+author: Aelion Solutions
+description: Panel-managed NPCs for Aelion Cloud
+website: https://github.com/Aelion-Solutions/aelion-cloud-plugins
