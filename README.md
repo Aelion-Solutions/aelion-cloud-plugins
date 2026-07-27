@@ -48,6 +48,9 @@ The panel fetches these JARs from this repo’s GitHub Releases (same
 
 ## Runtime (Signs)
 
-Signs SoftDepends **Aelion Aero**. Fleet snapshots and Connect use
+Signs depends on **Aelion Aero**. Fleet snapshots and Connect use
 `com.aelion.aero.api.AeroFleetService` registered by Aero Paper — see
 `signs-paper/README.md`.
+
+Compile against GitHub Packages `com.aelion.aero:aero-api` (pin `aeroApiVersion`).
+Resolve with `GITHUB_TOKEN` / `read:packages`.

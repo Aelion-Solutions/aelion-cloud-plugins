@@ -9,9 +9,10 @@ go through **Aelion Aero** (`AeroFleetService`) — this plugin does not hold a 
 - **Aelion Aero** on the same server (`depend: [AelionAero]`) with panel URL + token
 - Proxy with BungeeCord plugin messaging / Velocity legacy Connect support
 
-Build note: `signs-paper` compileOnly uses `libs/aero-common-api.jar` (copy from
-`aelion-aero` `aero-common` jar after building Aero). At runtime the API classes
-come from the Aero plugin JAR.
+Build note: Signs compiles against `com.aelion.aero:aero-api` from GitHub Packages
+(`aeroApiVersion` in `gradle.properties`). Set `GITHUB_TOKEN` (read:packages) and
+optionally `GITHUB_ACTOR` when resolving. At runtime the API classes come from the
+Aero plugin JAR — do not shade `aero-api` into Signs.
 
 ## Commands
 

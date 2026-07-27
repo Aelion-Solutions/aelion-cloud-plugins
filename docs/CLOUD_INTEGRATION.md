@@ -39,3 +39,4 @@ Signs SoftDepends Aero and must not call the panel with its own token.
 - Persistence: `signs.yml`
 - Fleet: `AeroFleetService` from Aero Paper
 - Join: Aero `connectPlayer` → BungeeCord `Connect` plugin message
+- Build: `compileOnly("com.aelion.aero:aero-api")` via GitHub Packages
