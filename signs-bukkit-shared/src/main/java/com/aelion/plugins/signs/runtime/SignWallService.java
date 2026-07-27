@@ -55,6 +55,7 @@ public final class SignWallService {
             public void run() {
                 renderer.tickAnimation();
                 for (ManagedSign sign : store.all()) {
+                    renderer.advanceAnimation(sign);
                     renderer.render(sign);
                 }
             }

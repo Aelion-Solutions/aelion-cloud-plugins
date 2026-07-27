@@ -35,6 +35,15 @@ public final class SignRenderer {
         globalAnimationTick++;
     }
 
+    public void advanceAnimation(ManagedSign managed) {
+        if (config.animation().syncMode() != AnimationSyncMode.PER_SIGN) {
+            return;
+        }
+        Long current = perSignTicks.get(managed.key());
+        long next = current == null ? 0L : current + 1L;
+        perSignTicks.put(managed.key(), next);
+    }
+
     public void render(ManagedSign managed) {
         Location location = managed.location();
         if (location == null || location.getWorld() == null) {
@@ -62,9 +71,7 @@ public final class SignRenderer {
         long animTick;
         if (anim.syncMode() == AnimationSyncMode.PER_SIGN) {
             Long current = perSignTicks.get(managed.key());
-            long next = current == null ? 0L : current + 1L;
-            perSignTicks.put(managed.key(), next);
-            animTick = next;
+            animTick = current == null ? 0L : current;
         } else {
             animTick = globalAnimationTick;
         }
