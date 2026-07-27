@@ -35,16 +35,15 @@ public final class SignRenderer {
         globalAnimationTick++;
     }
 
-    public void advanceAnimation(ManagedSign managed) {
-        if (config.animation().syncMode() != AnimationSyncMode.PER_SIGN) {
-            return;
-        }
-        Long current = perSignTicks.get(managed.key());
-        long next = current == null ? 0L : current + 1L;
-        perSignTicks.put(managed.key(), next);
+    public void render(ManagedSign managed) {
+        render(managed, false);
     }
 
-    public void render(ManagedSign managed) {
+    public void renderAnimationFrame(ManagedSign managed) {
+        render(managed, true);
+    }
+
+    private void render(ManagedSign managed, boolean advanceAnimationTick) {
         Location location = managed.location();
         if (location == null || location.getWorld() == null) {
             return;
@@ -71,7 +70,16 @@ public final class SignRenderer {
         long animTick;
         if (anim.syncMode() == AnimationSyncMode.PER_SIGN) {
             Long current = perSignTicks.get(managed.key());
-            animTick = current == null ? 0L : current;
+            long base = current == null ? 0L : current;
+            if (advanceAnimationTick) {
+                // Only advance once we've cleared every early-return gate, so ticks
+                // reflect frames actually drawn rather than scheduler cadence.
+                long next = current == null ? 0L : base + 1L;
+                perSignTicks.put(managed.key(), next);
+                animTick = next;
+            } else {
+                animTick = base;
+            }
         } else {
             animTick = globalAnimationTick;
         }
