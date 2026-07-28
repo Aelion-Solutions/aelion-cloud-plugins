@@ -82,7 +82,7 @@ public final class SignAssignmentEngine {
                 apply(sign, best);
                 claimed.add(best.id());
             } else {
-                SignLayoutState state = deriveIdleState(group, sign);
+                SignLayoutState state = deriveIdleState(group, sign, claimed);
                 sign.assign(
                         null,
                         null,
@@ -207,16 +207,43 @@ public final class SignAssignmentEngine {
         return SignLayoutState.ONLINE;
     }
 
-    private SignLayoutState deriveIdleState(FleetGroupSnapshot group, ManagedSign sign) {
-        SignLayoutState fromMembers = bestVisibleMemberState(group, sign);
-        if (fromMembers != null && fromMembers != SignLayoutState.SEARCHING) {
-            return fromMembers;
+    private SignLayoutState deriveIdleState(
+            FleetGroupSnapshot group,
+            ManagedSign sign,
+            Set<String> claimed
+    ) {
+        SignLayoutState fromUnclaimed = bestVisibleMemberState(group, sign, claimed);
+        if (fromUnclaimed != null && fromUnclaimed != SignLayoutState.SEARCHING) {
+            return fromUnclaimed;
+        }
+        // Other wall signs already claimed every suitable member — stay Searching
+        if (hasClaimedDisplayable(group, sign, claimed)) {
+            return SignLayoutState.SEARCHING;
         }
         // Members exist but none pass filters → Searching (don't fall back to group empty/online)
         if (hasMembers(group) && allDisplayableRejectedByFilter(group, sign)) {
             return SignLayoutState.SEARCHING;
         }
         return deriveGroupIdleState(group);
+    }
+
+    private boolean hasClaimedDisplayable(
+            FleetGroupSnapshot group,
+            ManagedSign sign,
+            Set<String> claimed
+    ) {
+        if (claimed == null || claimed.isEmpty()) {
+            return false;
+        }
+        for (FleetServerSnapshot member : group.members()) {
+            if (member.id() == null || !claimed.contains(member.id())) {
+                continue;
+            }
+            if (isDisplayCandidate(member, sign)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean allDisplayableRejectedByFilter(FleetGroupSnapshot group, ManagedSign sign) {
@@ -246,16 +273,18 @@ public final class SignAssignmentEngine {
         return group.members() != null && !group.members().isEmpty();
     }
 
-    private SignLayoutState bestVisibleMemberState(FleetGroupSnapshot group, ManagedSign sign) {
+    private SignLayoutState bestVisibleMemberState(
+            FleetGroupSnapshot group,
+            ManagedSign sign,
+            Set<String> claimed
+    ) {
         SignLayoutState best = null;
         int bestPri = Integer.MIN_VALUE;
         for (FleetServerSnapshot member : group.members()) {
-            if (sign.templateFilter() != null && member.name() != null
-                    && !member.name().toLowerCase(Locale.ROOT)
-                    .contains(sign.templateFilter().toLowerCase(Locale.ROOT))) {
+            if (member.id() != null && claimed != null && claimed.contains(member.id())) {
                 continue;
             }
-            if (!config.memberFilterFor(sign.targetGroup()).allows(member)) {
+            if (!isDisplayCandidate(member, sign)) {
                 continue;
             }
             SignLayoutState state = deriveMemberState(member);

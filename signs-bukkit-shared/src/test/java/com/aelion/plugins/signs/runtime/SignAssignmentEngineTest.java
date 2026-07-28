@@ -111,6 +111,21 @@ class SignAssignmentEngineTest {
         assertTrue(sign.assignedJoinable());
     }
 
+    @Test
+    void excessSignsStaySearchingWhenMembersClaimed() {
+        FleetServerSnapshot member = server("s1", "arena-1", "running", 0, 20, true, null);
+        FleetGroupSnapshot group = group("bedwars", "empty", member);
+        ManagedSign first = new ManagedSign("world", 0, 64, 0, "bedwars", null);
+        ManagedSign second = new ManagedSign("world", 1, 64, 0, "bedwars", null);
+
+        engine(emptyConfig(true)).reassign(Arrays.asList(first, second), fleet(group));
+
+        assertEquals("s1", first.assignedServerId());
+        assertEquals("empty", first.wallState());
+        assertNull(second.assignedServerId());
+        assertEquals("searching", second.wallState());
+    }
+
     private static SignAssignmentEngine engine(SignsConfig config) {
         return new SignAssignmentEngine(config);
     }
