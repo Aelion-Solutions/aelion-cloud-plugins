@@ -3,6 +3,7 @@ package com.aelion.plugins.signs.runtime;
 import com.aelion.aero.api.AeroFleetService;
 import com.aelion.plugins.signs.config.ForcefieldConfig;
 import com.aelion.plugins.signs.config.ForcefieldShape;
+import com.aelion.plugins.signs.config.MemberFilterSpec;
 import com.aelion.plugins.signs.config.SignLayoutState;
 import com.aelion.plugins.signs.config.SignsConfig;
 import com.aelion.plugins.signs.model.ManagedSign;
@@ -10,7 +11,10 @@ import com.aelion.plugins.signs.platform.SignsPlatform;
 import com.aelion.plugins.signs.store.SignStore;
 import com.aelion.plugins.signs.util.Strings;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -117,10 +121,66 @@ public final class SignWallService {
     }
 
     public boolean tryConnect(Player player, ManagedSign sign) {
-        if (fleet == null || Strings.isBlank(sign.assignedProxyName())) {
+        if (fleet == null || Strings.isBlank(sign.assignedProxyName()) || !sign.assignedJoinable()) {
             return false;
         }
         return fleet.connectPlayer(player.getUniqueId(), sign.assignedProxyName());
+    }
+
+    /**
+     * Dump fleet / filter debug lines for {@code /aesign debug}.
+     */
+    public List<String> debugLines(String groupFilter) {
+        List<String> lines = new ArrayList<String>();
+        if (fleet == null) {
+            lines.add("&cFleet service unavailable");
+            return lines;
+        }
+        if (!fleet.isConfigured()) {
+            lines.add("&eAero panel not configured");
+        }
+        String want = groupFilter == null ? null : groupFilter.toLowerCase(Locale.ROOT);
+        int groups = 0;
+        for (com.aelion.aero.api.FleetGroupSnapshot group : fleet.listGroups()) {
+            groups++;
+            if (want != null && (group.name() == null || !group.name().toLowerCase(Locale.ROOT).equals(want))) {
+                continue;
+            }
+            lines.add("&6Group &f" + group.name()
+                    + " &7live=&f" + group.liveStatus()
+                    + " &7players=&f" + group.currentPlayers() + "/" + group.maxPlayers()
+                    + " &7members=&f" + group.memberCount());
+            MemberFilterSpec filter = config == null
+                    ? MemberFilterSpec.empty()
+                    : config.memberFilterFor(group.name());
+            for (com.aelion.aero.api.FleetServerSnapshot m : group.members()) {
+                String explain = filter.explain(m);
+                lines.add("  &7- &f" + m.name()
+                        + " &7id=&f" + m.id()
+                        + " &7live=&f" + m.liveStatus()
+                        + " &7joinable=&f" + m.joinable()
+                        + " &7players=&f" + m.currentPlayers() + "/" + m.maxPlayers()
+                        + " &7motd=&f" + (m.motd() == null ? "(none)" : m.motd())
+                        + " &7filter=&f" + explain);
+            }
+        }
+        if (want != null && lines.size() <= (fleet.isConfigured() ? 0 : 1)) {
+            lines.add("&cNo group named &e" + groupFilter);
+        } else if (groups == 0) {
+            lines.add("&eNo groups from Aero (refresh/cache empty?)");
+        }
+        lines.add("&7Managed signs: &f" + store.size());
+        for (ManagedSign sign : store.all()) {
+            if (want != null && !sign.targetGroup().toLowerCase(Locale.ROOT).equals(want)) {
+                continue;
+            }
+            lines.add("  &7sign &f" + sign.key()
+                    + " &7group=&f" + sign.targetGroup()
+                    + " &7state=&f" + sign.wallState()
+                    + " &7assigned=&f" + (sign.assignedServerId() == null ? "-" : sign.assignedDisplayName())
+                    + " &7joinable=&f" + sign.assignedJoinable());
+        }
+        return lines;
     }
 
     private void applyForcefield() {

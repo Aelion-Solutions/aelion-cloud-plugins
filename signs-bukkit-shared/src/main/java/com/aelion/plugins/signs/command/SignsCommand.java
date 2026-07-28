@@ -38,7 +38,8 @@ public final class SignsCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length == 0) {
-            ColorMessages.send(sender, "&e/aesign create <group> [filter] &7| remove | removeall | cleanup [world] | reload");
+            ColorMessages.send(sender,
+                    "&e/aesign create <group> [filter] &7| remove | removeall | cleanup [world] | reload | debug [group]");
             return true;
         }
         String sub = args[0].toLowerCase(Locale.ROOT);
@@ -56,8 +57,13 @@ public final class SignsCommand implements CommandExecutor, TabCompleter {
         } else if ("reload".equals(sub)) {
             reloadAction.run();
             ColorMessages.send(sender, "&aSigns config and store reloaded");
+        } else if ("debug".equals(sub)) {
+            String group = args.length >= 2 ? args[1] : null;
+            for (String line : wall.debugLines(group)) {
+                ColorMessages.send(sender, line);
+            }
         } else {
-            ColorMessages.send(sender, "&cUnknown subcommand. Use create|remove|removeall|cleanup|reload");
+            ColorMessages.send(sender, "&cUnknown subcommand. Use create|remove|removeall|cleanup|reload|debug");
         }
         return true;
     }
@@ -135,7 +141,7 @@ public final class SignsCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> out = new ArrayList<String>();
         if (args.length == 1) {
-            for (String s : Arrays.asList("create", "remove", "removeall", "cleanup", "reload")) {
+            for (String s : Arrays.asList("create", "remove", "removeall", "cleanup", "reload", "debug")) {
                 if (s.startsWith(args[0].toLowerCase(Locale.ROOT))) {
                     out.add(s);
                 }

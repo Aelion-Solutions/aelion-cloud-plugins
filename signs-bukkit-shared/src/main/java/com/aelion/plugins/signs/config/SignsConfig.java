@@ -22,6 +22,8 @@ public final class SignsConfig {
     private final ForcefieldConfig forcefield;
     private final Map<SignLayoutState, SignLayoutsHolder> defaults;
     private final Map<String, Map<SignLayoutState, SignLayoutsHolder>> groupLayouts;
+    private final MemberFilterSpec defaultMemberFilter;
+    private final Map<String, MemberFilterSpec> groupFilters;
 
     public SignsConfig(
             boolean enabled,
@@ -30,7 +32,9 @@ public final class SignsConfig {
             AnimationConfig animation,
             ForcefieldConfig forcefield,
             Map<SignLayoutState, SignLayoutsHolder> defaults,
-            Map<String, Map<SignLayoutState, SignLayoutsHolder>> groupLayouts
+            Map<String, Map<SignLayoutState, SignLayoutsHolder>> groupLayouts,
+            MemberFilterSpec defaultMemberFilter,
+            Map<String, MemberFilterSpec> groupFilters
     ) {
         this.enabled = enabled;
         this.fleetPollMs = fleetPollMs;
@@ -39,6 +43,10 @@ public final class SignsConfig {
         this.forcefield = forcefield;
         this.defaults = defaults;
         this.groupLayouts = groupLayouts;
+        this.defaultMemberFilter = defaultMemberFilter == null ? MemberFilterSpec.empty() : defaultMemberFilter;
+        this.groupFilters = groupFilters == null
+                ? new HashMap<String, MemberFilterSpec>()
+                : groupFilters;
     }
 
     public boolean enabled() {
@@ -85,6 +93,19 @@ public final class SignsConfig {
         return holder == null ? SignLayoutsHolder.empty() : holder;
     }
 
+    /**
+     * Visibility filter for a target group (group-filters override, else member-filter).
+     */
+    public MemberFilterSpec memberFilterFor(String groupName) {
+        if (groupName != null) {
+            MemberFilterSpec override = groupFilters.get(groupName.toLowerCase(Locale.ROOT));
+            if (override != null) {
+                return override;
+            }
+        }
+        return defaultMemberFilter;
+    }
+
     public static SignsConfig from(FileConfiguration yaml) {
         AnimationConfig animation = readAnimation(yaml);
         ForcefieldConfig forcefield = readForcefield(yaml);
@@ -99,6 +120,18 @@ public final class SignsConfig {
             }
         }
 
+        MemberFilterSpec defaultFilter = MemberFilterSpec.from(yaml.getConfigurationSection("member-filter"));
+        Map<String, MemberFilterSpec> groupFilters = new HashMap<String, MemberFilterSpec>();
+        ConfigurationSection filterGroups = yaml.getConfigurationSection("group-filters");
+        if (filterGroups != null) {
+            for (String key : filterGroups.getKeys(false)) {
+                groupFilters.put(
+                        key.toLowerCase(Locale.ROOT),
+                        MemberFilterSpec.from(filterGroups.getConfigurationSection(key))
+                );
+            }
+        }
+
         return new SignsConfig(
                 yaml.getBoolean("enabled", true),
                 Math.max(500L, yaml.getLong("fleet-poll-ms", 2000L)),
@@ -106,7 +139,9 @@ public final class SignsConfig {
                 animation,
                 forcefield,
                 defaults,
-                groupLayouts
+                groupLayouts,
+                defaultFilter,
+                groupFilters
         );
     }
 
