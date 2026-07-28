@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.1](https://github.com/Aelion-Solutions/aelion-cloud-plugins/compare/v0.3.0...v0.3.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **signs:** assign walls without joinable-only gate ([d58dbfe](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/d58dbfe2644f5c99355ddc162373ed376dba68c0))
+* **signs:** idle layout skip claimed members ([877a770](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/877a770b4a6b074b82ce5c9c7167779223870bf1))
+* **signs:** wall assignment + member visibility filters ([d7a275b](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/d7a275be47d28c51de5858cd776780d3e9855ad3))
+
 ## [0.3.0](https://github.com/Aelion-Solutions/aelion-cloud-plugins/compare/v0.2.0...v0.3.0) (2026-07-27)
 
 
