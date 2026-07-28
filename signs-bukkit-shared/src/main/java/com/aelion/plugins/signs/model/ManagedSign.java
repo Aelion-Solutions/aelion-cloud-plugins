@@ -20,6 +20,8 @@ public final class ManagedSign {
     private String assignedDisplayName;
     private int assignedOnline;
     private int assignedMax;
+    private boolean assignedJoinable;
+    private String assignedMotd;
     private String wallState = "searching";
 
     public ManagedSign(String world, int x, int y, int z, String targetGroup, String templateFilter) {
@@ -87,6 +89,14 @@ public final class ManagedSign {
         return assignedMax;
     }
 
+    public boolean assignedJoinable() {
+        return assignedJoinable;
+    }
+
+    public String assignedMotd() {
+        return assignedMotd;
+    }
+
     public String wallState() {
         return wallState;
     }
@@ -97,6 +107,8 @@ public final class ManagedSign {
         this.assignedDisplayName = null;
         this.assignedOnline = 0;
         this.assignedMax = 0;
+        this.assignedJoinable = false;
+        this.assignedMotd = null;
         this.wallState = "searching";
     }
 
@@ -106,6 +118,8 @@ public final class ManagedSign {
             String displayName,
             int online,
             int max,
+            boolean joinable,
+            String motd,
             String wallState
     ) {
         this.assignedServerId = serverId;
@@ -113,6 +127,8 @@ public final class ManagedSign {
         this.assignedDisplayName = displayName;
         this.assignedOnline = online;
         this.assignedMax = max;
+        this.assignedJoinable = joinable;
+        this.assignedMotd = motd;
         this.wallState = wallState;
     }
 

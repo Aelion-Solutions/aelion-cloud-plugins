@@ -110,3 +110,21 @@ group-layouts: {}
 #       frames:
 #         - lines: ["&eBedWars", "&a%name%", "%online%/%max%", ""]
 #           block-material: GOLD_BLOCK
+
+# Visibility filters — hide members that fail rules (sign stays Searching).
+# Global defaults; overridden per target-group under group-filters.
+# Predicates: name-contains, name-matches, live-status, players-min/max, joinable,
+#             motd-contains, motd-matches (MOTD ignored until Aero reports it).
+# Placeholders: %name% %group% %online% %max% %status% %motd%
+member-filter:
+  require-all: []
+  reject-any: []
+
+group-filters: {}
+# example:
+#   bedwars:
+#     require-all:
+#       - name-contains: "bw-"
+#       - live-status: [running, starting]
+#     reject-any:
+#       - motd-contains: "In-Game"

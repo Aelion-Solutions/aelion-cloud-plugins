@@ -29,6 +29,10 @@ public final class SignStore {
         return new ArrayList<ManagedSign>(signs.values());
     }
 
+    public int size() {
+        return signs.size();
+    }
+
     public ManagedSign get(String key) {
         return signs.get(key);
     }

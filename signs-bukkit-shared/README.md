@@ -41,5 +41,10 @@ See shared `config.yml` for:
 - **forcefield** — shape, radius/height, cooldown, particles, sound (legacy `knockback` key still accepted)
 - **layouts** — searching / starting / empty / online / full frames + optional `group-layouts`
 
-Placeholders: `%name%`, `%group%`, `%online%`, `%max%`, `%status%`.
+Placeholders: `%name%`, `%group%`, `%online%`, `%max%`, `%status%`, `%motd%`.
 Placed signs are stored in `signs.yml`.
+
+Visibility filters (`member-filter` / `group-filters`) can require or reject members by
+name, live-status, players, joinable, and MOTD (`motd-contains` / `motd-matches`).
+
+Debug: `/aesign debug [group]` dumps Aero group members and filter pass/fail.

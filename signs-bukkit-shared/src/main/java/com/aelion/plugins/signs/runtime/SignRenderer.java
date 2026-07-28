@@ -99,6 +99,7 @@ public final class SignRenderer {
         values.put("online", String.valueOf(managed.assignedOnline()));
         values.put("max", String.valueOf(managed.assignedMax()));
         values.put("status", state.configKey());
+        values.put("motd", managed.assignedMotd() == null ? "" : managed.assignedMotd());
 
         for (int i = 0; i < 4; i++) {
             String line = Placeholders.apply(frame.lines().get(i), values);
