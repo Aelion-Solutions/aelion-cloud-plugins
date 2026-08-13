@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="778" height="270" alt="aelion-cloud-aero" src="https://github.com/user-attachments/assets/47ab4913-b031-4341-a31a-9a8c426501a0" />
+</p>
+
 # Aelion Cloud Plugins
 
 First-party Paper/Spigot plugins that complement [Aelion Cloud](https://github.com/Aelion-Solutions/aelion-cloud) and expand the servers with more Cloud features.
