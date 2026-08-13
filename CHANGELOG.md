@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.2](https://github.com/Aelion-Solutions/aelion-cloud-plugins/compare/v0.3.1...v0.3.2) (2026-08-13)
+
+
+### Bug Fixes
+
+* **signs:** apply Paper 1.20+ sign tile updates ([0bfbec2](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/0bfbec22a4c57a22ab2a1d638e23f17734e355b5))
+* **signs:** apply Paper 1.20+ sign tile updates ([1376549](https://github.com/Aelion-Solutions/aelion-cloud-plugins/commit/13765499039fc0526333434b82fec5f3a21925f3))
+
 ## [0.3.1](https://github.com/Aelion-Solutions/aelion-cloud-plugins/compare/v0.3.0...v0.3.1) (2026-07-28)
 
 
