@@ -1,7 +1,6 @@
 package com.aelion.plugins.signs.paper.v1_21;
 
 import com.aelion.plugins.signs.SignsBootstrap;
-import com.aelion.plugins.signs.platform.BlockDataSignsPlatform;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Aelion Signs for Minecraft 1.21.x. */
@@ -11,7 +10,7 @@ public final class SignsPaperPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        bootstrap = new SignsBootstrap(this, new BlockDataSignsPlatform());
+        bootstrap = new SignsBootstrap(this, new PaperSignsPlatform());
         bootstrap.enable();
     }
 

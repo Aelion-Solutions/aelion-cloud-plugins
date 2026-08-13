@@ -35,37 +35,54 @@ public final class SignRenderer {
         globalAnimationTick++;
     }
 
-    public void render(ManagedSign managed) {
-        render(managed, false);
+    /**
+     * @return {@code false} only when a sign tile write was attempted and failed
+     */
+    public boolean render(ManagedSign managed) {
+        return render(managed, false);
     }
 
-    public void renderAnimationFrame(ManagedSign managed) {
-        render(managed, true);
+    /**
+     * Paint an animation frame. Static layouts ({@code animations-per-second: 0}) are skipped.
+     *
+     * @return {@code false} only when a sign tile write was attempted and failed
+     */
+    public boolean renderAnimationFrame(ManagedSign managed) {
+        return render(managed, true);
     }
 
-    private void render(ManagedSign managed, boolean advanceAnimationTick) {
+    /**
+     * Whether the 50ms animation task should rewrite this layout.
+     */
+    static boolean paintsOnAnimationTick(SignLayoutsHolder holder) {
+        return holder != null && holder.animationsPerSecond() > 0;
+    }
+
+    private boolean render(ManagedSign managed, boolean advanceAnimationTick) {
         Location location = managed.location();
         if (location == null || location.getWorld() == null) {
-            return;
+            return true;
         }
         World world = location.getWorld();
         if (!isChunkLoaded(world, location.getBlockX(), location.getBlockZ())) {
-            return;
+            return true;
         }
 
         AnimationConfig anim = config.animation();
         if (anim.onlyWhenPlayersNear() && !playersNear(location, anim.playerNearRadius())) {
-            return;
+            return true;
         }
 
         Block block = location.getBlock();
         if (!(block.getState() instanceof Sign)) {
-            return;
+            return true;
         }
-        Sign sign = (Sign) block.getState();
 
         SignLayoutState state = SignLayoutState.fromConfigKey(managed.wallState());
         SignLayoutsHolder holder = config.layout(managed.targetGroup(), state);
+        if (advanceAnimationTick && !paintsOnAnimationTick(holder)) {
+            return true;
+        }
 
         long animTick;
         if (anim.syncMode() == AnimationSyncMode.PER_SIGN) {
@@ -101,16 +118,17 @@ public final class SignRenderer {
         values.put("status", state.configKey());
         values.put("motd", managed.assignedMotd() == null ? "" : managed.assignedMotd());
 
+        String[] lines = new String[4];
         for (int i = 0; i < 4; i++) {
-            String line = Placeholders.apply(frame.lines().get(i), values);
-            sign.setLine(i, ColorMessages.color(line));
+            lines[i] = ColorMessages.color(Placeholders.apply(frame.lines().get(i), values));
         }
-        sign.update(true, false);
+        boolean wrote = platform.writeSignLines(block, lines);
 
         Material behind = frame.blockMaterial();
         if (behind != null && behind != Material.AIR && behind.isBlock()) {
             platform.setBehindBlock(block, behind);
         }
+        return wrote;
     }
 
     private static boolean isChunkLoaded(World world, int blockX, int blockZ) {

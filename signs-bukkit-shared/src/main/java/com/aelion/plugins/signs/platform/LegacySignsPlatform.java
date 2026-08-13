@@ -37,4 +37,12 @@ public final class LegacySignsPlatform implements SignsPlatform {
     public Block getTargetBlock(Player player, int maxDistance) {
         return player.getTargetBlock((HashSet<Byte>) null, maxDistance);
     }
+
+    @Override
+    public boolean writeSignLines(Block signBlock, String[] lines) {
+        if (!(signBlock.getState() instanceof org.bukkit.block.Sign)) {
+            return false;
+        }
+        return SignWrites.writeLegacy((org.bukkit.block.Sign) signBlock.getState(), lines);
+    }
 }
