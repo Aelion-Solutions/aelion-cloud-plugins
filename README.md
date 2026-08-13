@@ -1,7 +1,8 @@
 # Aelion Cloud Plugins
 
-First-party Paper/Spigot plugins that complement
-[Aelion Cloud](https://github.com/Aelion-Solutions/aelion-cloud).
+First-party Paper/Spigot plugins that complement [Aelion Cloud](https://github.com/Aelion-Solutions/aelion-cloud) and expand the servers with more Cloud features.
+
+In normal cases you dont have to download these manually. This repo is for transparency.
 
 ## Modules
 
@@ -16,14 +17,11 @@ First-party Paper/Spigot plugins that complement
 | `signs-paper-26` | `aelion-signs-paper-26-<ver>.jar` | Paper 26.x |
 | `npcs-paper` | `aelion-npcs-<ver>.jar` | Paper 1.21.x (wip) |
 
-## Requirements
-
-- JDK **21** (and **25** for the Paper 26 band)
-- Gradle Wrapper (included)
-- GitHub Packages credentials for `aero-api` (see `.env.example`)
-
 ## Build
+Building is not documented, so this repo is for viewing the code to make sure its safe for you.
+Releases build artifacts and packages automatically, if you want to build it yourself for whatever reason you should understand how.
 
-```bash
-./gradlew build
-```
+## Cloud Installation - How it works
+
+Aelion Cloud AEpi / Panel connects to this repo via HTTP/S and fetches the latest released compat yaml file to detewrmine what to download.
+Based on server requirements it caches and installs the plugin(s) automatically.
