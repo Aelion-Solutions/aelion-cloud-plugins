@@ -52,7 +52,9 @@ public final class SignsBootstrap {
         }
 
         wall.start(config, fleet);
-        plugin.getServer().getPluginManager().registerEvents(new SignInteractListener(store, wall), plugin);
+        SignInteractListener interact = new SignInteractListener(store, wall);
+        plugin.getServer().getPluginManager().registerEvents(interact, plugin);
+        interact.registerOpenSignGuard(plugin);
 
         SignsCommand command = new SignsCommand(store, wall, platform, new Runnable() {
             @Override

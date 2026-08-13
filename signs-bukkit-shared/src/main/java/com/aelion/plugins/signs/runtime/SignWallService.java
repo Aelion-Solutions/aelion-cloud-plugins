@@ -38,6 +38,7 @@ public final class SignWallService {
     private BukkitTask fleetTask;
     private BukkitTask forcefieldTask;
     private final Map<UUID, Long> forcefieldCooldown = new HashMap<UUID, Long>();
+    private boolean loggedRenderFailure;
 
     public SignWallService(JavaPlugin plugin, SignStore store, SignsPlatform platform) {
         this.plugin = plugin;
@@ -52,6 +53,7 @@ public final class SignWallService {
         this.assignment = new SignAssignmentEngine(config);
         this.renderer = new SignRenderer(config, platform);
         forcefieldCooldown.clear();
+        loggedRenderFailure = false;
 
         long animTicks = Math.max(1L, config.animation().tickMs() / 50L);
         animationTask = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
@@ -59,7 +61,7 @@ public final class SignWallService {
             public void run() {
                 renderer.tickAnimation();
                 for (ManagedSign sign : store.all()) {
-                    renderer.renderAnimationFrame(sign);
+                    paintSign(sign, true);
                 }
             }
         }, animTicks, animTicks);
@@ -116,8 +118,27 @@ public final class SignWallService {
         }
         assignment.reassign(store.all(), fleet);
         for (ManagedSign sign : store.all()) {
-            renderer.render(sign);
+            paintSign(sign, false);
         }
+    }
+
+    private void paintSign(ManagedSign sign, boolean animationFrame) {
+        try {
+            boolean ok = animationFrame ? renderer.renderAnimationFrame(sign) : renderer.render(sign);
+            if (!ok) {
+                logRenderFailure("Sign tile update failed at " + sign.key());
+            }
+        } catch (RuntimeException ex) {
+            logRenderFailure("Sign render failed at " + sign.key() + ": " + ex.getMessage());
+        }
+    }
+
+    private void logRenderFailure(String message) {
+        if (loggedRenderFailure) {
+            return;
+        }
+        loggedRenderFailure = true;
+        plugin.getLogger().warning(message);
     }
 
     public boolean tryConnect(Player player, ManagedSign sign) {
